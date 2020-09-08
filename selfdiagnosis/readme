@@ -1,0 +1,16 @@
+# Take a look the Cluster-IP/NodePort with respect to RabbitMq in the Cluster K8s
+# kubectl --namespace="test-rabbitmq"
+
+# api rest
+docker build -t selfdiagnosis-python-version .
+docker tag selfdiagnosis-python-version californibrs/selfdiagnosis-python-version
+docker push californibrs/selfdiagnosis-python-version
+docker run -it --rm -p 3000:80 selfdiagnosis-python-version
+
+
+
+# data receiver
+docker build -t selfdiagnosis-receiver-python-version .
+docker tag selfdiagnosis-receiver-python-version californibrs/selfdiagnosis-receiver-python-version
+docker push californibrs/selfdiagnosis-receiver-python-version
+docker run -it --rm -p 3000:80 selfdiagnosis-receiver-python-version

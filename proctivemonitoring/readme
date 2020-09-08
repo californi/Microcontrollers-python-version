@@ -1,0 +1,14 @@
+# Take a look the Cluster-IP/NodePort with respect to RabbitMq in the Cluster K8s
+# kubectl --namespace="test-rabbitmq"
+
+# api rest
+docker build -t proactivemonitoring-python-version .
+docker tag proactivemonitoring-python-version californibrs/proactivemonitoring-python-version
+docker push californibrs/proactivemonitoring-python-version
+docker run -it --rm -p 3000:80 proactivemonitoring-python-version
+
+# data receiver
+docker build -t proactivemonitoring-receiver-python-version .
+docker tag proactivemonitoring-receiver-python-version californibrs/proactivemonitoring-receiver-python-version
+docker push californibrs/proactivemonitoring-receiver-python-version
+docker run -it --rm -p 3000:80 proactivemonitoring-receiver-python-version

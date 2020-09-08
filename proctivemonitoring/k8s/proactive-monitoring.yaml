@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proactive-monitoring-deployment
+spec:
+  selector:
+    matchLabels:
+      app: proactive-monitoring
+  template:
+    metadata:
+      labels:
+        app: proactive-monitoring
+    spec:
+      containers:
+      - name: proactive-monitoring
+        image: californibrs/proactivemonitoring-python-version
+        resources:
+          requests:
+            memory: "32Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proactive-monitoring-receiver-deployment
+spec:
+  selector:
+    matchLabels:
+      app: proactive-monitoring-receiver
+  template:
+    metadata:
+      labels:
+        app: proactive-monitoring-receiver
+    spec:
+      containers:
+      - name: proactive-monitoring-receiver
+        image: californibrs/proactive-monitoring-receiver-python-version
+        resources:
+          requests:
+            memory: "32Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proactive-monitoring-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: proactive-monitoring
+  ports:
+  - port: 5000 # port from application
+    targetPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proactive-monitoring-receiver-service
+spec:
+  type: ClusterIP
+  selector:
+    app: proactive-monitoring-receiver
+  ports:
+  - port: 3000
+    targetPort: 81
