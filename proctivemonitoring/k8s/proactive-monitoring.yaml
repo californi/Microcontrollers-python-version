@@ -37,7 +37,7 @@ spec:
     spec:
       containers:
       - name: proactive-monitoring-receiver
-        image: californibrs/proactive-monitoring-receiver-python-version
+        image: californibrs/proactivemonitoring-receiver-python-version
         resources:
           requests:
             memory: "32Mi"
@@ -57,7 +57,6 @@ spec:
     app: proactive-monitoring
   ports:
   - port: 5000 # port from application
-    targetPort: 80
 
 ---
 apiVersion: v1
@@ -70,4 +69,3 @@ spec:
     app: proactive-monitoring-receiver
   ports:
   - port: 3000
-    targetPort: 81

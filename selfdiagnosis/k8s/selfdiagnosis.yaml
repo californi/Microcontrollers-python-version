@@ -54,10 +54,9 @@ metadata:
 spec:
   type: LoadBalancer
   selector:
-    app: proactive-monitoring
+    app: selfdiagnosis
   ports:
   - port: 5001 # port from application
-    targetPort: 82
 
 ---
 apiVersion: v1
@@ -70,4 +69,3 @@ spec:
     app: selfdiagnosis-receiver
   ports:
   - port: 3001
-    targetPort: 83

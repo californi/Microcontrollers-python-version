@@ -1,11 +1,13 @@
 # Take a look the Cluster-IP/NodePort with respect to RabbitMq in the Cluster K8s
 # kubectl --namespace="test-rabbitmq"
 
+# Remenber to use kubectl config set-context --current --namespace=test-rabbitmq
+# The protocol amqp must be verified by executing "kubectl describe service rabbitmq"    --- e.g. amqp://guest:guest@172.17.0.3:5672/%2f'
 # api rest
 docker build -t selfdiagnosis-python-version .
 docker tag selfdiagnosis-python-version californibrs/selfdiagnosis-python-version
 docker push californibrs/selfdiagnosis-python-version
-docker run -it --rm -p 3000:80 selfdiagnosis-python-version
+# (dont use -- only during developing) docker run -it --rm -p 3000:80 selfdiagnosis-python-version
 
 
 
@@ -13,4 +15,10 @@ docker run -it --rm -p 3000:80 selfdiagnosis-python-version
 docker build -t selfdiagnosis-receiver-python-version .
 docker tag selfdiagnosis-receiver-python-version californibrs/selfdiagnosis-receiver-python-version
 docker push californibrs/selfdiagnosis-receiver-python-version
-docker run -it --rm -p 3000:80 selfdiagnosis-receiver-python-version
+# (dont use -- only during developing) docker run -it --rm -p 3000:80 selfdiagnosis-receiver-python-version
+
+# In order to test a forwaing message, it is necessary to stop the "receiver service"
+kubectl scale --replicas=0 deployment/proactive-monitoring-receiver-deployment
+
+# to return the test of receiving:
+kubectl scale --replicas=1 deployment/proactive-monitoring-receiver-deployment

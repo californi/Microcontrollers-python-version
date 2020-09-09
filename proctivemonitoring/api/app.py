@@ -18,10 +18,10 @@ class SendingData(Resource):
         description = str(postedData["description"])
         messageBody = 'Id: ' + id + ' - Description: ' + description
 
-        parameters = pika.URLParameters('amqp://guest:guest@10.98.237.36:5672/%2f')
+        parameters = pika.URLParameters('amqp://guest:guest@172.17.0.3:5672/%2f')
         connection = pika.BlockingConnection(parameters)
         channel = connection.channel()
-        channel.queue_declare(queue='monitoring-queue', durable=True)
+        channel.queue_declare(queue='monitoring-queue')
         channel.basic_publish('',
                             'monitoring-queue',
                             messageBody,
@@ -43,7 +43,7 @@ api.add_resource(SendingData, "/proactive-monitoring/sendingdata")
 
 @app.route('/')
 def hello_world():
-    return "Hello World!"
+    return "Hello World! - amqp://guest:guest@172.17.0.3:5672"
 
 
 if __name__=="__main__":
