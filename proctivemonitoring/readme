@@ -9,15 +9,27 @@ docker tag proactivemonitoring-python-version californibrs/proactivemonitoring-p
 docker push californibrs/proactivemonitoring-python-version
 # (dont use -- only during developing) docker run -it --rm -p 3000:80 proactivemonitoring-python-version
 
-# data receiver
-docker build -t proactivemonitoring-receiver-python-version .
-docker tag proactivemonitoring-receiver-python-version californibrs/proactivemonitoring-receiver-python-version
-docker push californibrs/proactivemonitoring-receiver-python-version
-# (dont use -- only during developing) docker run -it --rm -p 3000:80 proactivemonitoring-receiver-python-version
+
+## Enabling the ingress to use DNS - Minikube
+minikube addons enable ingress
+
+# Example for dashboard-ingress from minikube
+# Before, it is necessary enabling the dashboard with 'minikube dashboard'
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: dashboard-ingress
+  namespace: kubernetes-dashboard
+spec:
+  rules:
+  - host: dashboard.com
+    http:
+      paths:
+      - backend:
+          serviceName: kubernetes-dashboard
+          servicePort: 80
 
 
-# In order to test a forwaing message, it is necessary to stop the "receiver service"
-kubectl scale --replicas=0 deployment/selfdiagnosis-receiver-deployment
+# Verifying the ingress definition
+kubectl get ingress -n kubernetes-dashboard
 
-# to return the test of receiving:
-kubectl scale --replicas=1 deployment/selfdiagnosis-receiver-deployment

@@ -22,31 +22,6 @@ spec:
             memory: "128Mi"
             cpu: "500m"
 ---
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: selfdiagnosis-receiver-deployment
-spec:
-  selector:
-    matchLabels:
-      app: selfdiagnosis-receiver
-  template:
-    metadata:
-      labels:
-        app: selfdiagnosis-receiver
-    spec:
-      containers:
-      - name: selfdiagnosis-receiver
-        image: californibrs/selfdiagnosis-receiver-python-version
-        resources:
-          requests:
-            memory: "32Mi"
-            cpu: "100m"
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
-
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -57,15 +32,4 @@ spec:
     app: selfdiagnosis
   ports:
   - port: 5001 # port from application
-
 ---
-apiVersion: v1
-kind: Service
-metadata:
-  name: selfdiagnosis-receiver-service
-spec:
-  type: ClusterIP
-  selector:
-    app: selfdiagnosis-receiver
-  ports:
-  - port: 3001
