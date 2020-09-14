@@ -33,3 +33,4 @@ spec:
     app: proactive-monitoring
   ports:
   - port: 5000 # port from application
+---

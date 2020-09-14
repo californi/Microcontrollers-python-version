@@ -1,20 +1,21 @@
+
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: microcontrollers-ingress
   namespace: default
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-  - host: proactivemonitoring.com
+  - host: microcontrollers.com
     http:
       paths:
+      - path: /proactivemonitoring
         backend:
           serviceName: proactive-monitoring-service
           servicePort: 5000
-  - host: selfdiagnosis.com
-    http:
-      paths:
+      - path: /selfdiagnosis
         backend:
           serviceName: selfdiagnosis-service
           servicePort: 5001
-      
