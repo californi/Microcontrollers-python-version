@@ -8,3 +8,16 @@ docker build -t selfdiagnosis-python-version .
 docker tag selfdiagnosis-python-version californibrs/selfdiagnosis-python-version
 docker push californibrs/selfdiagnosis-python-version
 # (dont use -- only during developing) docker run -it --rm -p 3000:80 selfdiagnosis-python-version
+
+
+
+## Enabling the ingress to use DNS - Minikube
+minikube addons enable ingress
+
+
+# the cluster IP must be included in the hosts
+
+# the cluster IP must be included in the hosts
+
+kubectl get ingress
+<ip-address> microcontrollers.com

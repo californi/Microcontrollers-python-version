@@ -1,3 +1,7 @@
-Flask
-flask_restful
-pika
+httpx
+fastapi
+uvicorn
+pydantic 
+asyncio
+aiohttp
+requests

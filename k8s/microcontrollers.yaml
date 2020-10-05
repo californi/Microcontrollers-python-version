@@ -1,0 +1,134 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proactive-monitoring-deployment
+spec:
+  selector:
+    matchLabels:
+      app: proactive-monitoring
+  template:
+    metadata:
+      labels:
+        app: proactive-monitoring
+    spec:
+      containers:
+      - name: proactive-monitoring
+        image: californibrs/proactivemonitoring-python-version
+        resources:
+          requests:
+            memory: "32Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+            
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proactive-monitoring-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: proactive-monitoring
+  ports:
+  - port: 5000 # port from application
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: selfdiagnosis-deployment
+spec:
+  selector:
+    matchLabels:
+      app: selfdiagnosis
+  template:
+    metadata:
+      labels:
+        app: selfdiagnosis
+    spec:
+      containers:
+      - name: selfdiagnosis
+        image: californibrs/selfdiagnosis-python-version
+        resources:
+          requests:
+            memory: "32Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: selfdiagnosis-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: selfdiagnosis
+  ports:
+  - port: 5001 # port from application
+
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: microcontrollers-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /breplyingtoa
+        backend:
+          serviceName: selfdiagnosis-service
+          servicePort: 5001
+#      - path: /other route
+#        backend:
+#          serviceName: selfdiagnosis-service
+#          servicePort: 5001
+#      - path: /other route
+#        backend:
+#          serviceName: selfdiagnosis-service
+#          servicePort: 5001
+      - path: /asendingtob
+        backend:
+          serviceName: proactive-monitoring-service
+          servicePort: 5000
+#      - path: /other route
+#        backend:
+#          serviceName: proactive-monitoring-service
+#          servicePort: 5000
+#      - path: /other route
+#        backend:
+#          serviceName: proactive-monitoring-service
+#          servicePort: 5000  
+
+  
+#---
+#apiVersion: networking.k8s.io/v1beta1
+#kind: Ingress
+#metadata:
+#  name: microcontrollers-ingress
+#  namespace: default  
+#  annotations:
+#    nginx.ingress.kubernetes.io/rewrite-target: /$2
+#spec:
+#  rules:
+#  - host: proactivemonitoring.com
+#    http:
+#      paths:
+#      - backend:
+#          serviceName: proactive-monitoring-service
+#          servicePort: 5000
+#  - host: selfdiagnosis.com
+#    http:
+#      paths:
+#      - backend:
+#          serviceName: selfdiagnosis-service
+#          servicePort: 5001

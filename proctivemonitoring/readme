@@ -13,23 +13,8 @@ docker push californibrs/proactivemonitoring-python-version
 ## Enabling the ingress to use DNS - Minikube
 minikube addons enable ingress
 
-# Example for dashboard-ingress from minikube
-# Before, it is necessary enabling the dashboard with 'minikube dashboard'
-apiVersion: networking.k8s.io/v1beta1
-kind: Ingress
-metadata:
-  name: dashboard-ingress
-  namespace: kubernetes-dashboard
-spec:
-  rules:
-  - host: dashboard.com
-    http:
-      paths:
-      - backend:
-          serviceName: kubernetes-dashboard
-          servicePort: 80
 
+# the cluster IP must be included in the hosts
 
-# Verifying the ingress definition
-kubectl get ingress -n kubernetes-dashboard
-
+kubectl get ingress
+<ip-address> microcontrollers.com
