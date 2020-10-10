@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: proactive-monitoring-deployment
+  name: monitor-deployment
 spec:
   selector:
     matchLabels:
-      app: proactive-monitoring
+      app: monitor
   template:
     metadata:
       labels:
-        app: proactive-monitoring
+        app: monitor
     spec:
       containers:
-      - name: proactive-monitoring
-        image: californibrs/proactivemonitoring-python-version
+      - name: monitor
+        image: californibrs/monitor-proactivemonitoring  #initial image
         resources:
           requests:
             memory: "32Mi"
@@ -26,11 +26,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: proactive-monitoring-service
+  name: monitor-service
 spec:
   type: LoadBalancer
   selector:
-    app: proactive-monitoring
+    app: monitor
   ports:
   - port: 5000 # port from application
 ---
@@ -38,19 +38,19 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: selfdiagnosis-deployment
+  name: analyser-deployment
 spec:
   selector:
     matchLabels:
-      app: selfdiagnosis
+      app: analyser
   template:
     metadata:
       labels:
-        app: selfdiagnosis
+        app: analyser
     spec:
       containers:
-      - name: selfdiagnosis
-        image: californibrs/selfdiagnosis-python-version
+      - name: analyser
+        image: californibrs/analyser-selfdiagnosis #initial image
         resources:
           requests:
             memory: "32Mi"
@@ -62,11 +62,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: selfdiagnosis-service
+  name: analyser-service
 spec:
   type: LoadBalancer
   selector:
-    app: selfdiagnosis
+    app: analyser
   ports:
   - port: 5001 # port from application
 
@@ -84,51 +84,59 @@ spec:
   rules:
   - http:
       paths:
-      - path: /breplyingtoa
+      #Endpoints A-C: ProactiveMonitoring
+      - path: /monitoroperationa
         backend:
-          serviceName: selfdiagnosis-service
-          servicePort: 5001
-#      - path: /other route
-#        backend:
-#          serviceName: selfdiagnosis-service
-#          servicePort: 5001
-#      - path: /other route
-#        backend:
-#          serviceName: selfdiagnosis-service
-#          servicePort: 5001
-      - path: /asendingtob
-        backend:
-          serviceName: proactive-monitoring-service
+          serviceName: monitor-service
           servicePort: 5000
-#      - path: /other route
-#        backend:
-#          serviceName: proactive-monitoring-service
-#          servicePort: 5000
-#      - path: /other route
-#        backend:
-#          serviceName: proactive-monitoring-service
-#          servicePort: 5000  
+      - path: /monitoroperationb
+        backend:
+          serviceName: monitor-service
+          servicePort: 5000
+      - path: /monitoroperationc
+        backend:
+          serviceName: monitor-service
+          servicePort: 5000   
 
-  
-#---
-#apiVersion: networking.k8s.io/v1beta1
-#kind: Ingress
-#metadata:
-#  name: microcontrollers-ingress
-#  namespace: default  
-#  annotations:
-#    nginx.ingress.kubernetes.io/rewrite-target: /$2
-#spec:
-#  rules:
-#  - host: proactivemonitoring.com
-#    http:
-#      paths:
-#      - backend:
-#          serviceName: proactive-monitoring-service
-#          servicePort: 5000
-#  - host: selfdiagnosis.com
-#    http:
-#      paths:
-#      - backend:
-#          serviceName: selfdiagnosis-service
-#          servicePort: 5001
+        #Endpoints D-F: DynamicMonitoring
+      - path: /monitoroperationd
+        backend:
+          serviceName: monitor-service
+          servicePort: 5000
+      - path: /monitoroperatione
+        backend:
+          serviceName: monitor-service
+          servicePort: 5000
+      - path: /monitoroperationf
+        backend:
+          serviceName: monitor-service
+          servicePort: 5000   
+        
+
+        #Endpoints G-I: Selfdiagnosis
+      - path: /analyseroperationg
+        backend:
+          serviceName: analyser-service
+          servicePort: 5001
+      - path: /analyseroperationh
+        backend:
+          serviceName: analyser-service
+          servicePort: 5001
+      - path: /analyseroperationi
+        backend:
+          serviceName: analyser-service
+          servicePort: 5001
+
+        #Endpoints J-L: RealiabilityEstimation
+      - path: /analyseroperationj
+        backend:
+          serviceName: analyser-service
+          servicePort: 5001
+      - path: /analyseroperationk
+        backend:
+          serviceName: analyser-service
+          servicePort: 5001
+      - path: /analyseroperationl
+        backend:
+          serviceName: analyser-service
+          servicePort: 5001
