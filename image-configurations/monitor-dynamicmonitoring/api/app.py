@@ -10,7 +10,7 @@ class Message(BaseModel):
 app = FastAPI()
 
 #url_host = 'http://<service-name>:<port>'
-url_host = 'http://analyser-service:5001'
+url_host = 'http://analyser:5001'
 #microcontrollers Base64    bWljcm9jb250cm9sbGVycw==
 headers = {'Content-Type':'application/json', 'Authorization': 'Bearer {}'.format('bWljcm9jb250cm9sbGVycw==')}
 

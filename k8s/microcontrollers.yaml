@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: monitor-deployment
+  name: monitor
 spec:
   selector:
     matchLabels:
@@ -26,7 +26,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: monitor-service
+  name: monitor
 spec:
   type: LoadBalancer
   selector:
@@ -38,7 +38,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: analyser-deployment
+  name: analyser
 spec:
   selector:
     matchLabels:
@@ -62,7 +62,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: analyser-service
+  name: analyser
 spec:
   type: LoadBalancer
   selector:
@@ -87,56 +87,56 @@ spec:
       #Endpoints A-C: ProactiveMonitoring
       - path: /monitoroperationa
         backend:
-          serviceName: monitor-service
+          serviceName: monitor
           servicePort: 5000
       - path: /monitoroperationb
         backend:
-          serviceName: monitor-service
+          serviceName: monitor
           servicePort: 5000
       - path: /monitoroperationc
         backend:
-          serviceName: monitor-service
+          serviceName: monitor
           servicePort: 5000   
 
         #Endpoints D-F: DynamicMonitoring
       - path: /monitoroperationd
         backend:
-          serviceName: monitor-service
+          serviceName: monitor
           servicePort: 5000
       - path: /monitoroperatione
         backend:
-          serviceName: monitor-service
+          serviceName: monitor
           servicePort: 5000
       - path: /monitoroperationf
         backend:
-          serviceName: monitor-service
+          serviceName: monitor
           servicePort: 5000   
         
 
         #Endpoints G-I: Selfdiagnosis
       - path: /analyseroperationg
         backend:
-          serviceName: analyser-service
+          serviceName: analyser
           servicePort: 5001
       - path: /analyseroperationh
         backend:
-          serviceName: analyser-service
+          serviceName: analyser
           servicePort: 5001
       - path: /analyseroperationi
         backend:
-          serviceName: analyser-service
+          serviceName: analyser
           servicePort: 5001
 
         #Endpoints J-L: RealiabilityEstimation
       - path: /analyseroperationj
         backend:
-          serviceName: analyser-service
+          serviceName: analyser
           servicePort: 5001
       - path: /analyseroperationk
         backend:
-          serviceName: analyser-service
+          serviceName: analyser
           servicePort: 5001
       - path: /analyseroperationl
         backend:
-          serviceName: analyser-service
+          serviceName: analyser
           servicePort: 5001
