@@ -1,22 +1,12 @@
-import httpx
-from fastapi import FastAPI
-from pydantic import BaseModel
-import asyncio
+#Configuration1
+colTargets = {
+  "M1": ["A1", "A2"],
+  "M2": ["A1", "A3"],
+}
 
-class Message(BaseModel):
-    id: int
-    message: str
+def targets(origin: str):
+    response = colTargets.get(origin)
+      
+    return response
 
-app = FastAPI()
-
-#url = 'http://microcontrollers.com/selfdiagnosis/breplyingtoa'
-url = 'http://selfdiagnosis.com/breplyingtoa'
-
-@app.post("/asendingtob/")
-def aSendingToB(message: Message):
-    message_dict = message.dict()
-    message_dict.update({"message": message.message + " from proactive monitoring" })
-
-    response = httpx.post(url, json=message_dict)
-
-    return response.json()
+print(targets("M2"))
