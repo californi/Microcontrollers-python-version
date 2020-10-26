@@ -196,10 +196,10 @@ spec:
   - http:
       paths:
 
-      #Endpoints for Knowledge
+      #Endpoints for configurations
       - path: /targets
         backend:
-          serviceName: knowledge
+          serviceName: configurations
           servicePort: 5000
 
       #Endpoints A-C: ProactiveMonitoring
