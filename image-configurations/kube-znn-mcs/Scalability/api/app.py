@@ -1,33 +1,46 @@
 from fastapi import FastAPI, Request, Response
 import httpx
-#from pydantic import BaseModel
 import asyncio
-
-#class Message(BaseModel):
-#    id: int
-#    message: str
+from kubernetes import client, config
 
 app = FastAPI()
 
-#url_host = 'http://<service-name>:<port>'
-#url_host = 'http://analyser:5001'
-#microcontrollers Base64    bWljcm9jb250cm9sbGVycw==
-headers = {'Content-Type':'application/json', 'Authorization': 'Bearer {}'.format('bWljcm9jb250cm9sbGVycw==')}
+def update_deployment(api_instance, deployment):
+    # Update the deployment
+    api_response = api_instance.patch_namespaced_deployment(
+        name = deployment.metadata.name,
+        namespace = deployment.metadata.namespace,
+        body = deployment)
+
+    return "Deployment updated. status= " + str(api_response.status)
+
+
+app = FastAPI()
+config.load_incluster_config()
+apps_v1 = client.AppsV1Api()
 
 @app.post("/decreaseScalability/")
 def decreaseScalability():
 
-    # decreaseScalability
+    # decreaseFidelity
+    deployment = apps_v1.read_namespaced_deployment("kube-znn", "default")
+    # scale down
+    deployment.spec.replicas = deployment.spec.replicas - 1
+    status_log = update_deployment(apps_v1, deployment)
 
     # updating the Knowledge
 
-    return "empty"
+    return status_log
 
 @app.post("/increaseScalability/")
 def increaseScalability():
 
     # increaseScalability
+    deployment = apps_v1.read_namespaced_deployment("kube-znn", "default")
+    # scale down
+    deployment.spec.replicas = deployment.spec.replicas + 1
+    status_log = update_deployment(apps_v1, deployment)
 
     # updating the Knowledge
 
-    return "empty"
+    return status_log
