@@ -116,8 +116,7 @@ def main():
     # Configs can be set in Configuration class directly or using helper
     # utility. If no argument provided, the config will be loaded from
     # default location.
-    config.
-    ()
+    config.load_incluster_config()
     apps_v1 = client.AppsV1Api()
 
     # Uncomment the following lines to enable debug logging
